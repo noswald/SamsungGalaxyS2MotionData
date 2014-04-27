@@ -1,0 +1,56 @@
+Summary:
+
+	This file describes inputs, variables, transformations, and outputs from the run_analysis.R file
+
+Inputs:
+
+	The following files serve as inputs to the run_analysis.R file. It is already assumed that the user knows how to use Git, Github, R, and R studio.
+
+	1. UCI HAR files from the following link need to be located within the current working directory of R:
+	https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+
+Variables:
+
+	The following is a list of variables that are created within run_analysis.R and a description:
+	
+		The following variables are all from the UCI library linked above:
+		
+		1. activity_labels - From the activity_labels.txt file. Lists the 6 activities with descriptions included in the y_test and y_train files
+		2. features - From the features.txt file. Lists out the various measurements included in the columns of the X_test and X_train files
+		1. subject_test - From the subject_test.txt file. Lists the subjects tested.
+		2. X_test - From the X_test.txt file. Lists the various measurements described in the features variable
+		3. y_test - From the y_test.txt file. Lists one of six activities being performed per row of data, as described in the activity_labels variable.
+		4. subject_train - From the subject_train.txt file. Lists the subjects (people) upon which the training data is based.
+		5. X_train - From the X_train.txt file. Same as the X_test file, except with training data.
+		6. y_train - From the y_train.txt file. Same as the y_train file, except with training data.
+		
+		The following variables are intermediaries used to consolidate the test and train datasets into one dataset:
+		
+		1. test_consolidate - A data frame combining subject_test, y_test, and X_test
+		2. train_consolidate - A data frame combining subject_train, y_train, X_train
+		3. cons_merge_temp_1 - Merges together the test_consolidate and train_consolidate variables
+		4. cons_merge_temp_2 - Merges the activity_labels with the cons_merge_temp_1 variable
+		5. cons_merge - cleans up the cons_merge_temp_2 variable
+		
+		The following are used to create the mean_std_data file, which is a subset of the cons_merge data after the column names are reformatted:
+		
+		1. feature_mean - A variable that includes the names of all columns with "mean" within them
+		2. feature_std - A variable that includes the names of all columns with "std" within them
+		3. feature_merge - A variable that merges feature_mean and feature_std into one
+		4. mean_std_data - A variable that subsets the cons_merge data, only displaying the columns "Subject", "Activity", and 
+		   everything within the feature_merge variable
+		   
+		The following variables are used to create the mean_data.txt file, which is a transformation of the cons_merge data after reformatted columns:
+		
+		1. cons_merge_melt - A variable that uses the reshape2 library to "melt" a data frame
+		2. cons_merge_dcast - A variable that then takes the cons_merge_melt and performs averages on all columns besides "Subject" and "Activity"
+
+Transformations:
+
+	1. Once the cons_merge variable is created, the colnames function is called on it to make it more legible to the average user.
+	2. cons_merge_melt and cons_merge_dcast variables transform cons_merge in order to make the mean_data.txt file for averages
+	
+Output:
+
+	1. Once the mean_std_data variable is created, the script writes that to a table "mean_std_data.txt"
+	2. Once cons_merge_melt, then cons_merge_dcast have been created, then "mean_data.txt" is written to the working directory
